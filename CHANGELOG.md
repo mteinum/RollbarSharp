@@ -1,3 +1,8 @@
+## 0.3.2.0 (2014-12-11)
+
+* Added support for sending innerexceptions to Rollbar
+* Capture IP address of application sending report
+
 ## 0.3.1.0 (2013-12-14)
 
 * Added 'Context' field to the data model

@@ -71,7 +71,7 @@ end
 
 desc "Build the DLLs"
 dotnet_build :build => [:fetch_packages, :assemblyinfo] do |msb|
-  msb.targets :clean, :build
+  msb.targets :build
   msb.solution = SOLUTION_FILE
   msb.properties = BUILD_PROPERTIES
   msb.verbosity = "minimal"
@@ -86,17 +86,20 @@ nuspec do |nuspec|
 
   nuspec.id = APPLICATION_NAME
   nuspec.version = current_build_number
-  nuspec.authors = "Michael Roach"
+  nuspec.authors = ["Michael Roach"]
   nuspec.description = "Bindings for the Rollbar (rollbar.com) error reporting system"
   nuspec.release_notes = release_notes
   nuspec.title = APPLICATION_NAME
   nuspec.language = "en-US"
-  nuspec.licenseUrl = "https://github.com/mroach/RollbarSharp/blob/master/LICENSE.txt"
-  nuspec.projectUrl = "https://github.com/mroach/rollbarsharp"
+  nuspec.license_url = "https://github.com/mroach/RollbarSharp/blob/master/LICENSE.txt"
+  nuspec.project_url = "https://github.com/mroach/rollbarsharp"
   nuspec.dependency "Newtonsoft.Json", "5.0"
-  nuspec.tags = "rollbar"
-  nuspec.working_directory = PUBLISH_DIR
-  nuspec.output_file = "#{APPLICATION_NAME}.nuspec"
+  nuspec.tags = ["rollbar"]
+  # nuspec.working_directory = PUBLISH_DIR
+  nuspec.output_file = File.join(PUBLISH_DIR, "#{APPLICATION_NAME}.nuspec")
+
+  puts nuspec.output_file
+
 end
 
 desc "Copy DLLs to the nuget publish directory"
@@ -111,9 +114,9 @@ desc "Create the nuget package"
 nugetpack do |nuget|
   nuget.command     = "nuget"
   nuget.nuspec      = File.join(PUBLISH_DIR, "#{APPLICATION_NAME}.nuspec")
-  nuget.base_folder = PUBLISH_DIR
-  nuget.output      = BUILD_ROOT
-  nuget.symbols     = false
+  nuget.output_directory = PUBLISH_DIR
+  nuget.base_path      = PUBLISH_DIR
+  #nuget.symbols     = false
 end
 
 desc "Push nuget package to nuget.org"
