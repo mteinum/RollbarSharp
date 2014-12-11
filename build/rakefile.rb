@@ -1,3 +1,4 @@
+gem 'albacore', '=1.0.0'
 require 'rubygems'
 require 'albacore'
 require 'version_bumper'
