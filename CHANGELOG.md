@@ -1,3 +1,7 @@
+## 0.3.3.0 (2014-12-14)
+
+* Updated Newtonsoft.Json
+
 ## 0.3.2.0 (2014-12-11)
 
 * Added support for sending innerexceptions to Rollbar

@@ -107,7 +107,7 @@ task :copy do
   destDir = File.join(PUBLISH_DIR, 'lib/net40/')
   mkdir_p(destDir)
   cp_r(File.join(BIN_DIR, "RollbarSharp.dll"), destDir)
-  cp_r(File.join(BIN_DIR, "Newtonsoft.Json.dll"), destDir)
+#  cp_r(File.join(BIN_DIR, "Newtonsoft.Json.dll"), destDir)
 end
 
 desc "Create the nuget package"
