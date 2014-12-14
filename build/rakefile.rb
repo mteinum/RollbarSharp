@@ -93,7 +93,7 @@ nuspec do |nuspec|
   nuspec.language = "en-US"
   nuspec.license_url = "https://github.com/mroach/RollbarSharp/blob/master/LICENSE.txt"
   nuspec.project_url = "https://github.com/mroach/rollbarsharp"
-  nuspec.dependency "Newtonsoft.Json", "5.0"
+  nuspec.dependency "Newtonsoft.Json", "6.0.6"
   nuspec.tags = ["rollbar"]
   # nuspec.working_directory = PUBLISH_DIR
   nuspec.output_file = File.join(PUBLISH_DIR, "#{APPLICATION_NAME}.nuspec")

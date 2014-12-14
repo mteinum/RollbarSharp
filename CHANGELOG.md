@@ -1,3 +1,7 @@
+## 0.3.4.0 (2014-12-14)
+
+* Updated Newtonsoft.Json
+
 ## 0.3.3.0 (2014-12-14)
 
 * Updated Newtonsoft.Json
