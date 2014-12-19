@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NSpec;
+//using RollbarSharp.Builders;
 using RollbarSharp.Builders;
 
 namespace RollbarSharp.Tests.Serialization
