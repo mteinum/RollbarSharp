@@ -77,7 +77,7 @@ namespace RollbarSharp.Builders
         }
 
         /// <summary>
-        /// Finds dictionary keys in the <see cref="scrubParams"/> list and replaces their values
+        /// Finds dictionary keys in the scrubParams list and replaces their values
         /// with asterisks. Key comparison is case insensitive.
         /// </summary>
         /// <param name="dict"></param>
