@@ -20,12 +20,16 @@ namespace RollbarSharp
         /// <summary>
         /// Signature for the handler fired when the request is complete
         /// </summary>
-        /// <param name="source"></param>
-        /// <param name="args"></param>
         public delegate void RequestCompletedEventHandler(object source, RequestCompletedEventArgs args);
 
+        /// <summary>
+        /// 
+        /// </summary>
         public delegate void RequestSendingEventHandler(object source, RequestStartingEventArgs args);
 
+        /// <summary>
+        /// 
+        /// </summary>
         public Configuration Configuration { get; protected set; }
 
         /// <summary>
@@ -44,6 +48,10 @@ namespace RollbarSharp
         /// </summary>
         public event RequestCompletedEventHandler RequestCompleted;
 
+        /// <summary>
+        /// Creates a new RollbarClient using the given configuration
+        /// </summary>
+        /// <param name="configuration"></param>
         public RollbarClient(Configuration configuration)
         {
             Configuration = configuration;
@@ -71,34 +79,49 @@ namespace RollbarSharp
         /// <summary>
         /// Sends an exception using the "critical" level
         /// </summary>
-        /// <param name="ex"></param>
-        /// <param name="title"></param>
-        /// <param name="modelAction"></param>
-        public void SendCriticalException(Exception ex, string title = null, Action<DataModel> modelAction = null, object userParam = null)
+        public void SendCriticalException(Exception ex, string title = null, Action<DataModel> modelAction = null)
         {
-            SendException(ex, title, "critical", modelAction);
+            SendCriticalException(ex, title, modelAction, userParam: null);
+        }
+
+        /// <summary>
+        /// Sends an exception using the "critical" level
+        /// </summary>
+        public void SendCriticalException(Exception ex, string title, Action<DataModel> modelAction, object userParam)
+        {
+            SendException(ex, title, "critical", modelAction, userParam);
         }
 
         /// <summary>
         /// Sends an exception using the "error" level
         /// </summary>
-        /// <param name="ex"></param>
-        /// <param name="title"></param>
-        /// <param name="modelAction"></param>
-        public void SendErrorException(Exception ex, string title = null, Action<DataModel> modelAction = null, object userParam = null)
+        public void SendErrorException(Exception ex, string title = null, Action<DataModel> modelAction = null)
         {
-            SendException(ex, title, "error", modelAction);
+            SendErrorException(ex, title, modelAction, userParam: null);
+        }
+
+        /// <summary>
+        /// Sends an exception using the "error" level
+        /// </summary>
+        public void SendErrorException(Exception ex, string title, Action<DataModel> modelAction, object userParam)
+        {
+            SendException(ex, title, "error", modelAction, userParam);
         }
 
         /// <summary>
         /// Sents an exception using the "warning" level
         /// </summary>
-        /// <param name="ex"></param>
-        /// <param name="title"></param>
-        /// <param name="modelAction"></param>
-        public void SendWarningException(Exception ex, string title = null, Action<DataModel> modelAction = null, object userParam = null)
+        public void SendWarningException(Exception ex, string title = null, Action<DataModel> modelAction = null)
         {
-            SendException(ex, title, "warning", modelAction);
+            SendWarningException(ex, title, modelAction, userParam: null);
+        }
+
+        /// <summary>
+        /// Sents an exception using the "warning" level
+        /// </summary>
+        public void SendWarningException(Exception ex, string title, Action<DataModel> modelAction, object userParam)
+        {
+            SendException(ex, title, "warning", modelAction, userParam);
         }
 
         /// <summary>
@@ -109,7 +132,21 @@ namespace RollbarSharp
         /// <param name="title"></param>
         /// <param name="level">Default is "error". "critical" and "warning" may also make sense to use.</param>
         /// <param name="modelAction"></param>
-        public void SendException(Exception ex, string title = null, string level = "error", Action<DataModel> modelAction = null, object userParam = null)
+        public void SendException(Exception ex, string title = null, string level = "error", Action<DataModel> modelAction = null)
+        {
+            SendException(ex, title, level, modelAction, userParam: null);
+        }
+
+        /// <summary>
+        /// Sends the given <see cref="Exception"/> to Rollbar including
+        /// the stack trace. 
+        /// </summary>
+        /// <param name="ex"></param>
+        /// <param name="title"></param>
+        /// <param name="level">Default is "error". "critical" and "warning" may also make sense to use.</param>
+        /// <param name="modelAction"></param>
+        /// <param name="userParam"></param>
+        public void SendException(Exception ex, string title, string level, Action<DataModel> modelAction, object userParam)
         {
             var notice = NoticeBuilder.CreateExceptionNotice(ex, title, level);
             if (modelAction != null)
@@ -122,10 +159,19 @@ namespace RollbarSharp
         /// <summary>
         /// Sends a text notice using the "critical" level
         /// </summary>
+        public void SendCriticalMessage(string message, IDictionary<string, object> customData = null, Action<DataModel> modelAction = null)
+        {
+            SendCriticalMessage(message, customData, modelAction, userParam: null);
+        }
+
+        /// <summary>
+        /// Sends a text notice using the "critical" level
+        /// </summary>
         /// <param name="message"></param>
         /// <param name="customData"></param>
         /// <param name="modelAction"></param>
-        public void SendCriticalMessage(string message, IDictionary<string, object> customData = null, Action<DataModel> modelAction = null, object userParam = null)
+        /// <param name="userParam"></param>
+        public void SendCriticalMessage(string message, IDictionary<string, object> customData, Action<DataModel> modelAction, object userParam)
         {
             SendMessage(message, "critical", customData, modelAction, userParam);
         }
@@ -133,10 +179,15 @@ namespace RollbarSharp
         /// <summary>
         /// Sents a text notice using the "error" level
         /// </summary>
-        /// <param name="message"></param>
-        /// <param name="customData"></param>
-        /// <param name="modelAction"></param>
-        public void SendErrorMessage(string message, IDictionary<string, object> customData = null, Action<DataModel> modelAction = null, object userParam = null)
+        public void SendErrorMessage(string message, IDictionary<string, object> customData = null, Action<DataModel> modelAction = null)
+        {
+            SendErrorMessage(message, customData, modelAction, userParam: null);
+        }
+
+        /// <summary>
+        /// Sents a text notice using the "error" level
+        /// </summary>
+        public void SendErrorMessage(string message, IDictionary<string, object> customData, Action<DataModel> modelAction, object userParam)
         {
             SendMessage(message, "error", customData, modelAction, userParam);
         }
@@ -144,10 +195,15 @@ namespace RollbarSharp
         /// <summary>
         /// Sends a text notice using the "warning" level
         /// </summary>
-        /// <param name="message"></param>
-        /// <param name="customData"></param>
-        /// <param name="modelAction"></param>
-        public void SendWarningMessage(string message, IDictionary<string, object> customData = null, Action<DataModel> modelAction = null, object userParam = null)
+        public void SendWarningMessage(string message, IDictionary<string, object> customData = null, Action<DataModel> modelAction = null)
+        {
+            SendWarningMessage(message, customData, modelAction, userParam: null);
+        }
+
+        /// <summary>
+        /// Sends a text notice using the "warning" level
+        /// </summary>
+        public void SendWarningMessage(string message, IDictionary<string, object> customData, Action<DataModel> modelAction, object userParam)
         {
             SendMessage(message, "warning", customData, modelAction, userParam);
         }
@@ -155,10 +211,15 @@ namespace RollbarSharp
         /// <summary>
         /// Sends a text notice using the "info" level
         /// </summary>
-        /// <param name="message"></param>
-        /// <param name="customData"></param>
-        /// <param name="modelAction"></param>
-        public void SendInfoMessage(string message, IDictionary<string, object> customData = null, Action<DataModel> modelAction = null, object userParam = null)
+        public void SendInfoMessage(string message, IDictionary<string, object> customData = null, Action<DataModel> modelAction = null)
+        {
+            SendInfoMessage(message, customData, modelAction, userParam: null);
+        }
+
+        /// <summary>
+        /// Sends a text notice using the "info" level
+        /// </summary>
+        public void SendInfoMessage(string message, IDictionary<string, object> customData, Action<DataModel> modelAction, object userParam)
         {
             SendMessage(message, "info", customData, modelAction, userParam);
         }
@@ -166,22 +227,31 @@ namespace RollbarSharp
         /// <summary>
         /// Sends a text notice using the "debug" level
         /// </summary>
-        /// <param name="message"></param>
-        /// <param name="customData"></param>
-        /// <param name="modelAction"></param>
-        public void SendDebugMessage(string message, IDictionary<string, object> customData = null, Action<DataModel> modelAction = null, object userParam = null)
+        public void SendDebugMessage(string message, IDictionary<string, object> customData = null, Action<DataModel> modelAction = null)
         {
-            SendMessage(message, "debug", customData, modelAction);
+            SendDebugMessage(message, customData, modelAction, userParam: null);
+        }
+
+        /// <summary>
+        /// Sends a text notice using the "debug" level
+        /// </summary>
+        public void SendDebugMessage(string message, IDictionary<string, object> customData, Action<DataModel> modelAction, object userParam)
+        {
+            SendMessage(message, "debug", customData, modelAction, userParam);
         }
 
         /// <summary>
         /// Sents a text notice using the given level of severity
         /// </summary>
-        /// <param name="message"></param>
-        /// <param name="level"></param>
-        /// <param name="customData"></param>
-        /// <param name="modelAction"></param>
-        public void SendMessage(string message, string level, IDictionary<string, object> customData = null, Action<DataModel> modelAction = null, object userParam = null)
+        public void SendMessage(string message, string level, IDictionary<string, object> customData = null, Action<DataModel> modelAction = null)
+        {
+            SendMessage(message, level, customData, modelAction, userParam: null);
+        }
+
+        /// <summary>
+        /// Sents a text notice using the given level of severity
+        /// </summary>
+        public void SendMessage(string message, string level, IDictionary<string, object> customData, Action<DataModel> modelAction, object userParam)
         {
             var notice = NoticeBuilder.CreateMessageNotice(message, level, customData);
             if (modelAction != null)
@@ -191,6 +261,17 @@ namespace RollbarSharp
             Send(notice, userParam);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public void Send(DataModel data)
+        {
+            Send(data, userParam: null);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public void Send(DataModel data, object userParam)
         {
             var payload = new PayloadModel(Configuration.AccessToken, data);
@@ -207,23 +288,38 @@ namespace RollbarSharp
             return JsonConvert.SerializeObject(data, Configuration.JsonSettings);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="payload"></param>
+        /// <param name="userParam"></param>
         protected void HttpPost(PayloadModel payload, object userParam)
         {
             var payloadString = Serialize(payload);
             HttpPost(payloadString, userParam);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="payload"></param>
+        /// <param name="userParam"></param>
         protected void HttpPost(string payload, object userParam)
         {
             Task.Factory.StartNew(() => HttpPostAsync(payload, userParam));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="payload"></param>
+        /// <param name="userParam"></param>
         protected void HttpPostAsync(string payload, object userParam)
         {
             // convert the json payload to bytes for transmission
             var payloadBytes = Encoding.GetEncoding(Configuration.Encoding).GetBytes(payload);
 
-            var request = (HttpWebRequest) WebRequest.Create(Configuration.Endpoint);
+            var request = (HttpWebRequest)WebRequest.Create(Configuration.Endpoint);
             request.ContentType = "application/json";
             request.Method = "POST";
             request.ContentLength = payloadBytes.Length;
@@ -266,7 +362,7 @@ namespace RollbarSharp
                 {
                     OnRequestCompleted(ex.Response, userParam);
                 }
-                
+
                 return;
             }
             catch (Exception ex)
@@ -278,6 +374,11 @@ namespace RollbarSharp
             OnRequestCompleted(response, userParam);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="payload"></param>
+        /// <param name="userParam"></param>
         protected void OnRequestStarting(string payload, object userParam)
         {
             if (RequestStarting == null)
@@ -286,9 +387,14 @@ namespace RollbarSharp
             RequestStarting(this, new RequestStartingEventArgs(payload, userParam));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="response"></param>
+        /// <param name="userParam"></param>
         protected void OnRequestCompleted(WebResponse response, object userParam)
         {
-            var responseCode = (int) ((HttpWebResponse) response).StatusCode;
+            var responseCode = (int)((HttpWebResponse)response).StatusCode;
             string responseText;
 
             using (var stream = response.GetResponseStream())
@@ -303,11 +409,15 @@ namespace RollbarSharp
                     }
                 }
             }
-            
+
             var result = new Result(responseCode, responseText, userParam);
             OnRequestCompleted(result);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="result"></param>
         protected void OnRequestCompleted(Result result)
         {
             if (RequestCompleted == null)
